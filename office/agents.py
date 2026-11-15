@@ -138,7 +138,7 @@ REVIEWER_PERSONA = (
 
 REVIEWER_SKILLS_HINT = (
     "Before writing the verdict, load the review skills that match the change with the Skill tool: "
-    "always edge-cases; test-review when tests were added or should have been; security-review when "
+    "always edge-cases; test-review when tests were added or should have been; security-audit when "
     "the code handles input, files, commands, network or secrets; frontend-review for user interface "
     "code; design-review when the office gives you screenshots of the page; verify-fixes when notes "
     "from a previous review are listed."

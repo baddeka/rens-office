@@ -1,5 +1,5 @@
 {
   "name": "reviewer-skills",
-  "description": "Skills for the Rens Office reviewer: security review, test quality, edge cases, frontend code, how the page looks, verifying fixes.",
-  "version": "0.2.0"
+  "description": "Skills for the Rens Office reviewer: security audit (cloudflare/security-audit-skill, MIT), test quality, edge cases, frontend code, how the page looks, verifying fixes.",
+  "version": "0.3.0"
 }

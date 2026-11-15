@@ -51,7 +51,7 @@ def test_each_role_has_its_own_skills(tmp_path):
         "frontend-ui", "frontend-verify", "design-directions", "match-reference", "ui-kit", "ux-copy",
         "frontend-design", "motion", "visual-craft",  # the classic design skills, without Taste Skill
     } == skills["frontend"]
-    assert {"security-review", "frontend-review", "verify-fixes"} <= skills["reviewer"]
+    assert {"security-audit", "frontend-review", "verify-fixes"} <= skills["reviewer"]
     assert {"brainstorm", "write-brief", "ui-brief"} <= skills["ideator"]
     assert not (skills["backend"] | skills["frontend"]) & skills["reviewer"]
     for plugin in ("developer", "backend", "frontend", "frontend-classic", "reviewer", "ideator"):

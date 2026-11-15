@@ -115,7 +115,7 @@ Each agent has its own skills: Claude Code skills, loaded only into that agent's
 |---|---|
 | `edge-cases` | Hunts for inputs that break the code |
 | `test-review` | Checks whether the tests would catch a broken implementation |
-| `security-review` | Looks for injection, path traversal, leaked secrets |
+| `security-audit` | Finds vulnerabilities that cross a real trust boundary, with source evidence and the smallest fix ([Cloudflare's skill](https://github.com/cloudflare/security-audit-skill), MIT) |
 | `frontend-review` | Checks UI code: unsafe rendering, accessibility, layout, states |
 | `verify-fixes` | On a re-review, checks that each earlier note is really fixed |
 
