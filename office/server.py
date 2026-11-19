@@ -1,4 +1,4 @@
-"""Local web server for the office: `ai-office`, or `ai-office --workspace ./my-project`."""
+"""Local web server for the office: `rens-office`, or `rens-office --workspace ./my-project`."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ from reviewer.context import ContextError
 from reviewer.llm import EFFORTS
 
 from . import preview, taste
-from .agents import DEVELOPER_TOOLS, PREVIEW_DIR, Busy, Office
+from .agents import DEVELOPER_TOOLS, PREVIEW_DIR, Busy, Office, load_setting
 from .i18n import LANGUAGES, t
 from .projects import Projects, default_projects_dir
 
@@ -252,7 +252,7 @@ def make_handler(projects: Projects, hosts: set[str] = LOOPBACK_NAMES):
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        prog="ai-office",
+        prog="rens-office",
         description="Four Claude agents in an office: one comes up with ideas, two build them, one reviews the work.",
     )
     p.add_argument(
@@ -273,7 +273,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--model", help="Claude model for all the agents (default: Claude Code's default)")
     p.add_argument("--effort", choices=EFFORTS)
     p.add_argument("--no-bash", action="store_true", help="do not let the developers run shell commands")
-    p.add_argument("--lang", choices=LANGUAGES, default="en", help="language of the page and the agents (default: en)")
+    p.add_argument(
+        "--lang", choices=LANGUAGES, help="language of the page and the agents (default: the last one chosen, else en)"
+    )
     p.add_argument("--no-skills", action="store_true", help="run the agents without the office's skills")
     p.add_argument("--open", action="store_true", help="open the page in the browser once the office is up")
     p.add_argument(
@@ -308,7 +310,9 @@ def main(argv: list[str] | None = None) -> int:
             preview_port=pages.server_port if pages else None,
         )
 
-    projects = Projects(Path(args.projects).expanduser().resolve(), open_office, lang=args.lang)
+    saved_lang = load_setting(CHOICES_FILE, "lang")
+    lang = args.lang or (saved_lang if saved_lang in LANGUAGES else "en")
+    projects = Projects(Path(args.projects).expanduser().resolve(), open_office, lang=lang, settings_file=CHOICES_FILE)
     if args.workspace:
         try:
             projects.open(Path(args.workspace))

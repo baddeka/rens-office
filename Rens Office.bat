@@ -1,5 +1,5 @@
 @echo off
-rem Rens Office: one click starts the newest version. Double-click this file, or the desktop shortcut
+rem Rens Office on Windows: one click starts the newest version. Double-click this file, or the desktop shortcut
 rem that "Add desktop shortcut.bat" makes for it.
 chcp 65001 >nul
 title Rens Office
@@ -28,7 +28,7 @@ where claude >nul 2>nul
 if errorlevel 1 echo Claude Code was not found. Install it and sign in with: claude
 
 echo Starting the office. Close this window to stop it.
-".venv\Scripts\python.exe" -m office.server --lang ru --open %*
+".venv\Scripts\python.exe" -m office.server --open %*
 if errorlevel 1 pause
 exit /b
 

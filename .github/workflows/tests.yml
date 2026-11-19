@@ -1,0 +1,26 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e ".[dev]"
+      # Commits made by the tests need a name; the page tests use the Chrome the runner has.
+      - run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.com"
+          # Ubuntu 24.04 blocks the sandbox Chrome starts its pages in; allow it for the page tests.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - run: python -m pytest -q

@@ -8,7 +8,7 @@ import threading
 from collections.abc import Callable
 from pathlib import Path
 
-from .agents import STATE_FILE, Busy, Office, safe_file_name
+from .agents import STATE_FILE, Busy, Office, safe_file_name, save_setting
 from .i18n import LANGUAGES, t
 
 # Statuses in which an agent is doing something a project switch would cut short.
@@ -23,10 +23,11 @@ def default_projects_dir() -> Path:
 class Projects:
     """The project list and the one open project; the office works on one project at a time."""
 
-    def __init__(self, root: Path, open_office: Callable[[Path, str], Office], lang: str = "en"):
+    def __init__(self, root: Path, open_office: Callable[[Path, str], Office], lang: str = "en", settings_file: Path | None = None):
         self.root = root
         self._open_office = open_office  # (folder, language) -> the office for that project
         self.lang = lang
+        self.settings_file = settings_file  # where the chosen language is kept
         self.office: Office | None = None
         # The subscription limits are the account's, not a project's: they carry over a switch.
         self._limits: list[dict] | None = None
@@ -100,6 +101,11 @@ class Projects:
             office = self.office
         if office is not None:
             office.set_language(lang)
+        if self.settings_file is not None:
+            try:
+                save_setting(self.settings_file, "lang", lang)  # the next start opens in it
+            except OSError:
+                pass
 
     def wait_for_project(self) -> queue.Queue:
         q: queue.Queue = queue.Queue()

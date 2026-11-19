@@ -274,3 +274,19 @@ def _drain(q):
     while not q.empty():
         events.append(q.get_nowait())
     return events
+
+
+def test_the_chosen_language_is_kept_with_the_models(fake_claude, tmp_path):  # noqa: F811
+    settings = tmp_path / "settings.json"
+    Office(tmp_path / "ws", choices_file=settings).set_choice("reviewer", "opus", None)
+    projects = Projects(tmp_path / "projects", lambda folder, lang: Office(folder, lang=lang), settings_file=settings)
+
+    projects.set_language("ru")
+    with pytest.raises(ValueError):
+        projects.set_language("xx")
+
+    saved = json.loads(settings.read_text(encoding="utf-8"))
+    assert saved["lang"] == "ru"
+    assert saved["agents"]["reviewer"] == {"model": "opus", "effort": None}  # the models stay
+    Office(tmp_path / "ws", choices_file=settings).set_choice("ideator", "haiku", "low")
+    assert json.loads(settings.read_text(encoding="utf-8"))["lang"] == "ru"  # and the language too

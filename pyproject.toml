@@ -1,21 +1,36 @@
 [project]
-name = "ai-review"
-version = "0.1.0"
-description = "Claude-powered code reviewer and a three-agent web office"
+name = "rens-office"
+version = "0.6.0"
+description = "A pixel-art office of Claude Code agents that come up with ideas, build them and review each other's work"
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+authors = [{ name = "Dias Badrenov" }]
+keywords = ["claude", "claude-code", "ai-agents", "code-review", "pixel-art"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Environment :: Web Environment",
+    "Topic :: Software Development",
+]
 dependencies = ["anthropic>=2.4", "pydantic>=2"]
+
+[project.urls]
+Homepage = "https://github.com/baddeka/spaceeeeee"
+Issues = "https://github.com/baddeka/spaceeeeee/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
 
 [project.scripts]
+rens-office = "office.server:main"
+rens-office-shot = "office.shot:main"
 ai-review = "reviewer.cli:main"
 ai-office = "office.server:main"
-ai-office-shot = "office.shot:main"
 
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]

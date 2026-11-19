@@ -255,6 +255,32 @@ def rework_prompt(verdict: dict, lang: str = "en") -> str:
     return "\n".join(lines)
 
 
+def load_setting(file: Path | None, key: str):
+    """One setting from the user's settings file, or None when there is none or it can't be read."""
+    if file is None:
+        return None
+    try:
+        saved = json.loads(file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return saved.get(key) if isinstance(saved, dict) else None
+
+
+_SETTINGS_LOCK = threading.Lock()  # the models and the language are saved from different threads
+
+
+def save_setting(file: Path, key: str, value) -> None:
+    """Writes one setting into the user's settings file, keeping the others."""
+    with _SETTINGS_LOCK:
+        try:
+            saved = json.loads(file.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            saved = {}
+        saved = saved if isinstance(saved, dict) else {}
+        saved[key] = value
+        file.write_text(json.dumps(saved, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
 def load_skills(plugin: str | Path) -> list[dict]:
     """Names and descriptions of a plugin's skills, read from their SKILL.md front matter."""
     skills = []
@@ -464,7 +490,7 @@ class Office:
             choices[agent] = {"model": model, "effort": effort}
             if self._choices_file is not None:
                 # Saved first, so a choice that could not be kept is not shown as taken.
-                self._choices_file.write_text(json.dumps({"agents": choices}, indent=2), encoding="utf-8")
+                save_setting(self._choices_file, "agents", choices)
             self.choices = choices
         self._emit_state()
 
