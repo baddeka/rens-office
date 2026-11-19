@@ -33,7 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", help=f"folder for the screenshots (default: {SHOTS_DIR.as_posix()})")
     parser.add_argument("--full", action="store_true", help="also photograph the rest of a long page, a screen at a time")
     parser.add_argument("--only", choices=sorted(DEVICES), help="look on one device only")
-    args = parser.parse_args(argv)
+    args = parser.parse_intermixed_args(argv)  # steps may come after the options; Python 3.11 needs this
 
     if find_browser() is None:
         print(NO_BROWSER, file=sys.stderr)
