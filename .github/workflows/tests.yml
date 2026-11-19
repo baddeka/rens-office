@@ -24,3 +24,9 @@ jobs:
           # Ubuntu 24.04 blocks the sandbox Chrome starts its pages in; allow it for the page tests.
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - run: python -m pytest -q
+
+  scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck -s sh install.sh rens-office.sh "Rens Office.command"

@@ -588,12 +588,12 @@ def _git_config(monkeypatch, tmp_path, text):
 
 
 def test_commits_go_out_under_the_users_git_name(tmp_path, monkeypatch):
-    _git_config(monkeypatch, tmp_path, "[user]\n\tname = baddeka\n\temail = 1+baddeka@users.noreply.github.com\n")
+    _git_config(monkeypatch, tmp_path, "[user]\n\tname = dev\n\temail = 1+dev@users.noreply.github.com\n")
     office = Office(tmp_path / "ws")
 
     office._commit("office: before task")
 
-    assert office._git("log", "-1", "--format=%an <%ae>") == "baddeka <1+baddeka@users.noreply.github.com>"
+    assert office._git("log", "-1", "--format=%an <%ae>") == "dev <1+dev@users.noreply.github.com>"
 
 
 def test_commits_fall_back_to_the_office_name(tmp_path, monkeypatch):

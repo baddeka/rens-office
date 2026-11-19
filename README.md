@@ -24,28 +24,35 @@ already have (Pro or Max). No API key, no server, no account anywhere else.
 
 ## Getting started
 
-You need [Python 3.11+](https://www.python.org/downloads/), [git](https://git-scm.com/downloads) and
-Claude Code, signed in once:
+One line installs everything and opens the office.
+
+**macOS or Linux**, in Terminal:
 
 ```bash
-claude
+curl -fsSL https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.sh | sh
 ```
 
-Then get the office:
+**Windows**, in PowerShell:
 
-```bash
-git clone https://github.com/baddeka/spaceeeeee rens-office
+```powershell
+irm https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.ps1 | iex
 ```
 
-and start it the way that suits your system. Every start pulls the newest version first, sets itself
-up the first time (about a minute), and opens the office in your browser.
+It installs what's missing (Git on Windows, [uv](https://docs.astral.sh/uv/), which brings its own
+Python, and Claude Code), puts the office in a `rens-office` folder in your home folder and adds a
+**Rens Office** shortcut: on the desktop and in the Start menu on Windows, on the desktop on a Mac, in
+the applications menu on Linux. Then it asks you to sign in to Claude once and opens the office. The
+scripts are short, so you can read them first: [install.sh](install.sh), [install.ps1](install.ps1).
 
-| | |
-|---|---|
-| **Windows** | Double-click `Rens Office.bat`. Run `Add desktop shortcut.bat` once to get a desktop icon. |
-| **macOS** | Double-click `Rens Office.command`. |
-| **Linux** | `./rens-office.sh` |
-| **Anywhere** | `pip install -e .` and then `rens-office --open` |
+From then on, start it from the shortcut. Every start updates the office first.
+
+**Your Claude account.** Everyone signs in with their own Claude account (Pro or Max; no API key),
+and the agents' work counts against that account's limits. Claude Code does the sign-in and keeps it on
+your computer. The office never sees or stores it; it only asks Claude Code whether someone is signed
+in, and says so at the top of the page if nobody is.
+
+**Already cloned the repo?** Double-click `Rens Office.bat` on Windows or `Rens Office.command` on a
+Mac, or run `./rens-office.sh` on Linux. With pip it's `pip install -e .` and then `rens-office --open`.
 
 Nice to have, not required:
 

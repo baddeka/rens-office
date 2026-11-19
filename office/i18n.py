@@ -113,6 +113,10 @@ MESSAGES = {
         ),
         "styles_before": "Directions you already proposed, so propose different ones unless the brief asks for them: {names}",
         "unknown_language": "Unknown language",
+        "claude_missing": "Claude Code is not installed, so the agents can't work yet. Install it from "
+        "https://code.claude.com, sign in with `claude auth login`, then reload the page.",
+        "claude_signed_out": "Nobody is signed in to Claude Code on this computer. Run `claude auth login` in a "
+        "terminal, sign in with your own Claude account, then reload the page.",
         "bad_rounds": "Rounds must be between 1 and 10",
         # prompts for the developers
         "rework_approved": "checkren approved the work but left notes. The user asks you to address them.",
@@ -282,6 +286,10 @@ MESSAGES = {
         ),
         "styles_before": "Стили, которые ты уже предлагал; предложи другие, если в запросе не сказано иначе: {names}",
         "unknown_language": "Неизвестный язык",
+        "claude_missing": "Claude Code не установлен, поэтому агенты пока не могут работать. Установи его с "
+        "https://code.claude.com, войди командой `claude auth login` и обнови страницу.",
+        "claude_signed_out": "На этом компьютере никто не вошёл в Claude Code. Выполни в терминале "
+        "`claude auth login`, войди в свой аккаунт Claude и обнови страницу.",
         "bad_rounds": "Число раундов: от 1 до 10",
         "rework_approved": "checkren одобряет работу, но есть замечания. Пользователь просит их учесть.",
         "rework_rejected": "checkren проверяет твою работу и возвращает её на доработку.",

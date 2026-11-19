@@ -20,7 +20,7 @@ from urllib.parse import urlsplit
 from reviewer.context import ContextError
 from reviewer.llm import EFFORTS
 
-from . import preview, taste
+from . import account, preview, taste
 from .agents import DEVELOPER_TOOLS, PREVIEW_DIR, Busy, Office, load_setting
 from .i18n import LANGUAGES, t
 from .projects import Projects, default_projects_dir
@@ -129,6 +129,8 @@ def make_handler(projects: Projects, hosts: set[str] = LOOPBACK_NAMES):
                 return self._json(HTTPStatus.OK, projects.snapshot())
             if path == "/api/events":
                 return self._events()
+            if path == "/api/claude":
+                return self._json(HTTPStatus.OK, account.claude_status())
             if path.startswith("/preview/"):
                 # A screenshot from the office's last look at the open project's page.
                 office = projects.office
@@ -211,7 +213,7 @@ def make_handler(projects: Projects, hosts: set[str] = LOOPBACK_NAMES):
             except (ValueError, ContextError) as e:
                 return self._json(HTTPStatus.BAD_REQUEST, {"error": str(e)})
             except Exception as e:  # the page should hear about it instead of losing the connection
-                print(f"ai-office: {self.path}: {e!r}", file=sys.stderr)
+                print(f"rens-office: {self.path}: {e!r}", file=sys.stderr)
                 return self._json(HTTPStatus.INTERNAL_SERVER_ERROR, {"error": f"server error: {e}"})
             # An action answers with what it made (an upload, its name), else with the new state.
             self._json(HTTPStatus.OK, result if result is not None else projects.snapshot())
@@ -317,14 +319,14 @@ def main(argv: list[str] | None = None) -> int:
         try:
             projects.open(Path(args.workspace))
         except (ValueError, ContextError) as e:
-            print(f"ai-office: {e}", file=sys.stderr)
+            print(f"rens-office: {e}", file=sys.stderr)
             return 2
 
     try:
         server = server_class(bind_host)((bind_host, args.port), make_handler(projects, hosts))
     except OSError as e:
         # Most often the office is already running: a second click on its shortcut shows that one.
-        print(f"ai-office: cannot listen on port {args.port}: {e.strerror or e}", file=sys.stderr)
+        print(f"rens-office: cannot listen on port {args.port}: {e.strerror or e}", file=sys.stderr)
         projects.shutdown()
         if pages is not None:
             pages.shutdown()
@@ -334,6 +336,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     address = page_url(bind_host, server.server_port)
     print(f"Rens Office: {address}  (projects: {projects.root})")
+    threading.Thread(target=_say_if_claude_is_not_ready, args=(projects.lang,), daemon=True).start()
     if args.open:
         threading.Timer(0.5, webbrowser.open, [address]).start()
     if bind_host not in LOOPBACK_NAMES:
@@ -354,6 +357,15 @@ def main(argv: list[str] | None = None) -> int:
             pages.shutdown()
             pages.server_close()
     return 0
+
+
+def _say_if_claude_is_not_ready(lang: str) -> None:
+    """A line in the terminal when the agents can't work yet; the page shows the same."""
+    status = account.claude_status()
+    if not status["installed"]:
+        print(t(lang, "claude_missing"), file=sys.stderr)
+    elif status["signed_in"] is False:
+        print(t(lang, "claude_signed_out"), file=sys.stderr)
 
 
 if __name__ == "__main__":

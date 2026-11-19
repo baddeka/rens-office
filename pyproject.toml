@@ -1,6 +1,6 @@
 [project]
 name = "rens-office"
-version = "0.6.0"
+version = "0.7.0"
 description = "A pixel-art office of Claude Code agents that come up with ideas, build them and review each other's work"
 readme = "README.md"
 requires-python = ">=3.11"

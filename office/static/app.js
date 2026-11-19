@@ -66,6 +66,8 @@ const STRINGS = {
     },
     online: "online",
     offline: "offline",
+    claude_missing: "Claude Code isn't installed, so the agents can't work yet. Install it from code.claude.com, sign in with `claude auth login`, then reload this page.",
+    claude_signed_out: "Nobody is signed in to Claude Code on this computer. Run `claude auth login` in a terminal, sign in with your own Claude account, then reload this page.",
     task_placeholder: {
       backend: "For example: an API that keeps notes in SQLite, with tests",
       frontend: "For example: a landing page for the timer, phone first",
@@ -209,6 +211,8 @@ const STRINGS = {
     },
     online: "на связи",
     offline: "нет связи",
+    claude_missing: "Claude Code не установлен, поэтому агенты пока не могут работать. Установи его с code.claude.com, войди командой `claude auth login` и обнови страницу.",
+    claude_signed_out: "На этом компьютере никто не вошёл в Claude Code. Выполни в терминале `claude auth login`, войди в свой аккаунт Claude и обнови страницу.",
     task_placeholder: {
       backend: "Например: API для заметок с хранением в SQLite и тестами",
       frontend: "Например: лендинг для таймера, сначала под телефон",
@@ -301,6 +305,7 @@ const log = []; // every entry the server sent, for the drawer's per-agent activ
 let drawerAgent = null;
 let drawerOpener = null;
 let taskDeveloper = "backend"; // who the next task goes to
+let claudeStatus = null; // whether Claude Code is installed and signed in, asked once at load
 const S = () => STRINGS[lang];
 
 function plural(n, one, few, many) {
@@ -334,6 +339,27 @@ function applyLanguage(next) {
     el.textContent = `${S().names[el.dataset.agent] || el.dataset.agent} · ${el.dataset.time}`;
   });
   if (drawerAgent) renderDrawerLog();
+  renderAccountNote();
+}
+
+// A note at the top when the agents can't work: no Claude Code, or nobody signed in to it.
+function renderAccountNote() {
+  const note = $("account-note");
+  let key = null;
+  if (claudeStatus && !claudeStatus.installed) key = "claude_missing";
+  else if (claudeStatus && claudeStatus.signed_in === false) key = "claude_signed_out";
+  note.hidden = !key;
+  if (key) richText(note, S()[key]);
+}
+
+async function checkClaude() {
+  try {
+    const response = await fetch("/api/claude");
+    if (response.ok) claudeStatus = await response.json();
+  } catch {
+    // The office works without the note.
+  }
+  renderAccountNote();
 }
 
 // ---------- rendering ----------
@@ -1385,3 +1411,4 @@ applyLanguage(lang);
 setTaskDeveloper(savedDeveloper);
 setTimeMode(savedTime);
 connect();
+checkClaude();

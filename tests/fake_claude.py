@@ -17,6 +17,9 @@ import time
 from pathlib import Path
 
 args = sys.argv[1:]
+if args[:2] == ["auth", "status"]:  # the office asks whether someone is signed in
+    print(os.environ.get("FAKE_CLAUDE_AUTH") or json.dumps({"loggedIn": True, "authMethod": "claude.ai"}))
+    sys.exit(0)
 prompt = sys.stdin.read()
 
 if log := os.environ.get("FAKE_CLAUDE_LOG"):
