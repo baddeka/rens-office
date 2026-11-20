@@ -5,8 +5,8 @@ Thanks for taking a look. Issues and pull requests are welcome, small ones espec
 ## Setting up
 
 ```bash
-git clone https://github.com/baddeka/spaceeeeee
-cd spaceeeeee
+git clone https://github.com/baddeka/rens-office
+cd rens-office
 python -m venv .venv
 .venv/bin/pip install -e ".[dev]"     # on Windows: .venv\Scripts\pip install -e ".[dev]"
 python -m pytest -q

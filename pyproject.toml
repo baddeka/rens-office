@@ -17,8 +17,8 @@ classifiers = [
 dependencies = ["anthropic>=2.4", "pydantic>=2"]
 
 [project.urls]
-Homepage = "https://github.com/baddeka/spaceeeeee"
-Issues = "https://github.com/baddeka/spaceeeeee/issues"
+Homepage = "https://github.com/baddeka/rens-office"
+Issues = "https://github.com/baddeka/rens-office/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]

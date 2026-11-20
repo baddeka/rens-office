@@ -4,7 +4,7 @@
 
 **Маленький пиксельный офис, где агенты Claude Code придумывают идеи, делают их и проверяют работу друг друга.**
 
-[![tests](https://github.com/baddeka/spaceeeeee/actions/workflows/tests.yml/badge.svg)](https://github.com/baddeka/spaceeeeee/actions/workflows/tests.yml)
+[![tests](https://github.com/baddeka/rens-office/actions/workflows/tests.yml/badge.svg)](https://github.com/baddeka/rens-office/actions/workflows/tests.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab)
 [![MIT licence](https://img.shields.io/badge/licence-MIT-2bb673)](LICENSE)
 ![Работает на подписке Claude](https://img.shields.io/badge/runs%20on-Claude%20Code-d97757)
@@ -29,13 +29,13 @@
 **macOS или Linux**, в Терминале:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/baddeka/rens-office/HEAD/install.sh | sh
 ```
 
 **Windows**, в PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.ps1 | iex
+irm https://raw.githubusercontent.com/baddeka/rens-office/HEAD/install.ps1 | iex
 ```
 
 Скрипт поставит то, чего не хватает (Git на Windows, [uv](https://docs.astral.sh/uv/), который сам

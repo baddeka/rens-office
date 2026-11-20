@@ -1,14 +1,14 @@
 #!/bin/sh
 # Installs Rens Office on macOS or Linux and starts it. Paste into a terminal:
 #
-#   curl -fsSL https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/baddeka/rens-office/HEAD/install.sh | sh
 #
 # It gets what's missing (uv, which brings its own Python, and Claude Code), puts the office in
 # ~/rens-office, adds a "Rens Office" shortcut, asks you to sign in to your Claude account once,
 # and opens the office. Run it again any time: it only updates what is there.
 set -e
 
-REPO="${RENS_OFFICE_REPO:-https://github.com/baddeka/spaceeeeee}"
+REPO="${RENS_OFFICE_REPO:-https://github.com/baddeka/rens-office}"
 DIR="${RENS_OFFICE_DIR:-$HOME/rens-office}"
 PATH="$HOME/.local/bin:$PATH"
 

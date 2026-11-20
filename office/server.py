@@ -55,7 +55,16 @@ def page_url(bind_host: str, port: int) -> str:
     return f"http://[{host}]:{port}" if ":" in host else f"http://{host}:{port}"
 
 
-class OfficeServer6(ThreadingHTTPServer):
+class OfficeServer(ThreadingHTTPServer):
+    def handle_error(self, request, client_address):
+        # A browser that closes a tab or reloads drops its connections, which arrives as a reset
+        # (WinError 10054 on Windows) or a broken pipe. Nothing went wrong, so no traceback.
+        if isinstance(sys.exc_info()[1], ConnectionError):
+            return
+        super().handle_error(request, client_address)
+
+
+class OfficeServer6(OfficeServer):
     address_family = socket.AF_INET6
 
     def server_bind(self):
@@ -67,7 +76,7 @@ class OfficeServer6(ThreadingHTTPServer):
 
 def server_class(bind_host: str) -> type[ThreadingHTTPServer]:
     """ThreadingHTTPServer speaks IPv4 only; an IPv6 address needs an IPv6 socket."""
-    return OfficeServer6 if ":" in bind_host else ThreadingHTTPServer
+    return OfficeServer6 if ":" in bind_host else OfficeServer
 
 
 def _stop_serving(signum, frame):

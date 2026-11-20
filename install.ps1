@@ -1,6 +1,6 @@
 # Installs Rens Office on Windows and starts it. Paste into PowerShell:
 #
-#   irm https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/baddeka/rens-office/HEAD/install.ps1 | iex
 #
 # It gets what's missing (Git, uv, which brings its own Python, and Claude Code), puts the office in
 # your user folder under rens-office, adds a Rens Office shortcut to the desktop and the Start menu,
@@ -8,7 +8,7 @@
 # only updates what is there.
 
 $ErrorActionPreference = 'Continue'
-$Repo = if ($env:RENS_OFFICE_REPO) { $env:RENS_OFFICE_REPO } else { 'https://github.com/baddeka/spaceeeeee' }
+$Repo = if ($env:RENS_OFFICE_REPO) { $env:RENS_OFFICE_REPO } else { 'https://github.com/baddeka/rens-office' }
 $Dir = if ($env:RENS_OFFICE_DIR) { $env:RENS_OFFICE_DIR } else { Join-Path $HOME 'rens-office' }
 
 function Step([string]$Text) { Write-Host "`n==> $Text" -ForegroundColor Cyan }
@@ -66,8 +66,13 @@ function Install-RensOffice {
   Step 'Adding Rens Office to the desktop and the Start menu'
   $shell = New-Object -ComObject WScript.Shell
   foreach ($folder in @([Environment]::GetFolderPath('Desktop'), [Environment]::GetFolderPath('Programs'))) {
-    $link = $shell.CreateShortcut((Join-Path $folder 'Rens Office.lnk'))
+    $path = Join-Path $folder 'Rens Office.lnk'
+    # CreateShortcut opens a shortcut that is already there and keeps its arguments, icon and
+    # hotkey, so one left from an older setup would pass its own arguments to the office.
+    Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+    $link = $shell.CreateShortcut($path)
     $link.TargetPath = Join-Path $Dir 'Rens Office.bat'
+    $link.Arguments = ''
     $link.WorkingDirectory = $Dir
     $link.Description = 'Rens Office'
     $link.Save()

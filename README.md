@@ -4,7 +4,7 @@
 
 **A tiny pixel-art office where Claude Code agents come up with ideas, build them and review each other's work.**
 
-[![tests](https://github.com/baddeka/spaceeeeee/actions/workflows/tests.yml/badge.svg)](https://github.com/baddeka/spaceeeeee/actions/workflows/tests.yml)
+[![tests](https://github.com/baddeka/rens-office/actions/workflows/tests.yml/badge.svg)](https://github.com/baddeka/rens-office/actions/workflows/tests.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab)
 [![MIT licence](https://img.shields.io/badge/licence-MIT-2bb673)](LICENSE)
 ![Runs on a Claude subscription](https://img.shields.io/badge/runs%20on-Claude%20Code-d97757)
@@ -29,13 +29,13 @@ One line installs everything and opens the office.
 **macOS or Linux**, in Terminal:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/baddeka/rens-office/HEAD/install.sh | sh
 ```
 
 **Windows**, in PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/baddeka/spaceeeeee/HEAD/install.ps1 | iex
+irm https://raw.githubusercontent.com/baddeka/rens-office/HEAD/install.ps1 | iex
 ```
 
 It installs what's missing (Git on Windows, [uv](https://docs.astral.sh/uv/), which brings its own
