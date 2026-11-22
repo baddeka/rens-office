@@ -155,6 +155,25 @@ class Look:
         return "\n".join(lines)
 
 
+# Where other tools look for a browser, Taste Skill's own checks among them.
+CHROME_ENV = "CHROME_PATH"
+
+
+def share_browser(environ=os.environ) -> str | None:
+    """Tells the agents' tools which browser to drive, through CHROME_PATH.
+
+    Those tools look at CHROME_PATH and then only in Google Chrome's usual folders, so without it
+    they find nothing on a computer with only Edge, or with Chromium somewhere else, and skip their
+    checks. The agents inherit the office's environment, so setting it once at start is enough.
+    """
+    if environ.get(CHROME_ENV):
+        return environ[CHROME_ENV]
+    browser = find_browser()
+    if browser:
+        environ[CHROME_ENV] = browser
+    return browser
+
+
 def find_browser() -> str | None:
     """The path of a browser that can be driven, or None."""
     chosen = os.environ.get(BROWSER_ENV)

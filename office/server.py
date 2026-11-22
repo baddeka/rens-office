@@ -20,7 +20,7 @@ from urllib.parse import urlsplit
 from reviewer.context import ContextError
 from reviewer.llm import EFFORTS
 
-from . import account, preview, taste
+from . import account, eyes, preview, taste
 from .agents import DEVELOPER_TOOLS, PREVIEW_DIR, Busy, Office, load_setting
 from .i18n import LANGUAGES, t
 from .projects import Projects, default_projects_dir
@@ -295,6 +295,7 @@ def main(argv: list[str] | None = None) -> int:
         help="do not open the project's page in a browser to show it and to check it before a review",
     )
     args = p.parse_args(argv)
+    eyes.share_browser()  # before any agent starts, so they all inherit it
 
     tools = [tool for tool in DEVELOPER_TOOLS if not (args.no_bash and tool == "Bash")]
 

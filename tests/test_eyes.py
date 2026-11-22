@@ -261,3 +261,18 @@ def test_the_preview_serves_the_page_and_nothing_hidden(site):
     for path in ["/.env", "/.git/config", "/..%2foutside.txt", "/assets/..%5c..%5coutside.txt", "/missing.css"]:
         assert fetch(site, path)[0] == 404
     assert fetch(site, "/", host="evil.example")[0] == 403
+
+
+def test_the_agents_tools_get_the_browser_the_office_found(monkeypatch):
+    monkeypatch.setattr(eyes, "find_browser", lambda: "/opt/browsers/chromium")
+    env = {}
+    assert eyes.share_browser(env) == "/opt/browsers/chromium"
+    assert env == {"CHROME_PATH": "/opt/browsers/chromium"}
+
+    mine = {"CHROME_PATH": "/usr/bin/my-chrome"}
+    assert eyes.share_browser(mine) == "/usr/bin/my-chrome"  # a browser the user chose stays
+    assert mine == {"CHROME_PATH": "/usr/bin/my-chrome"}
+
+    monkeypatch.setattr(eyes, "find_browser", lambda: None)
+    none = {}
+    assert eyes.share_browser(none) is None and none == {}
